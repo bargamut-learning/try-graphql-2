@@ -1,19 +1,25 @@
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLSchema } = require(`graphql`);
-const { directors } = require("../mocks");
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLList } = require(`graphql`);
+const { directors, movies } = require("../mocks");
 const { compareIds } = require('../utils');
 
 const DirectorType = new GraphQLObjectType({
 	name: `Director`,
-	fields: {
+	fields: () => ({
 		id: { type: GraphQLID },
 		name: { type: GraphQLString },
 		age: { type: GraphQLInt },
-	}
+		movies: {
+			type: new GraphQLList(MovieType),
+			resolve(parent, args) {
+				return movies.filter(movie => compareIds(movie.directorId, parent.id));
+			}
+		}
+	})
 });
 
 const MovieType = new GraphQLObjectType({
 	name: `Movie`,
-	fields: {
+	fields: () => ({
 		id: { type: GraphQLID },
 		name: { type: GraphQLString },
 		genre: { type: GraphQLString },
@@ -24,7 +30,7 @@ const MovieType = new GraphQLObjectType({
 				return directors.find(director => compareIds(director.id, parent.directorId));
 			}
 		}
-	}
+	})
 });
 
 const Query = new GraphQLObjectType({
@@ -37,6 +43,18 @@ const Query = new GraphQLObjectType({
 		director: {
 			type: DirectorType,
 			args: { id: { type: GraphQLID } },
+		},
+		movies: {
+			type: new GraphQLList(MovieType),
+			resolve(parent, args) {
+				return movies;
+			}
+		},
+		directors: {
+			type: new GraphQLList(DirectorType),
+			resolve(parent, args) {
+				return directors;
+			}
 		},
 	}
 });
