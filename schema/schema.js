@@ -1,22 +1,37 @@
-const { buildSchema } = require(`graphql`);
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLSchema } = require(`graphql`);
 
-const schema = buildSchema(`
-	type Movie {
-		id: ID!
-		name: String
-		genre: String
+const MovieType = new GraphQLObjectType({
+	name: `Movie`,
+	fields: {
+		id: { type: GraphQLID },
+		name: { type: GraphQLString },
+		genre: { type: GraphQLString },
 	}
+});
 
-	type Director {
-		id: ID!
-		name: String
-		age: Int
+const DirectorType = new GraphQLObjectType({
+	name: `Director`,
+	fields: {
+		id: { type: GraphQLID },
+		name: { type: GraphQLString },
+		age: { type: GraphQLInt },
 	}
+});
 
-	type Query {
-		movie(id: ID): Movie!
-		director(id: ID): Director!
+const Query = new GraphQLObjectType({
+	name: `Query`,
+	fields: {
+		movie: {
+			type: MovieType,
+			args: { id: { type: GraphQLID } },
+		},
+		director: {
+			type: DirectorType,
+			args: { id: { type: GraphQLID } },
+		},
 	}
-`);
+});
 
-module.exports = schema;
+module.exports = new GraphQLSchema({
+	query: Query,
+});
