@@ -1,13 +1,6 @@
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLSchema } = require(`graphql`);
-
-const MovieType = new GraphQLObjectType({
-	name: `Movie`,
-	fields: {
-		id: { type: GraphQLID },
-		name: { type: GraphQLString },
-		genre: { type: GraphQLString },
-	}
-});
+const { directors } = require("../mocks");
+const { compareIds } = require('../utils');
 
 const DirectorType = new GraphQLObjectType({
 	name: `Director`,
@@ -15,6 +8,22 @@ const DirectorType = new GraphQLObjectType({
 		id: { type: GraphQLID },
 		name: { type: GraphQLString },
 		age: { type: GraphQLInt },
+	}
+});
+
+const MovieType = new GraphQLObjectType({
+	name: `Movie`,
+	fields: {
+		id: { type: GraphQLID },
+		name: { type: GraphQLString },
+		genre: { type: GraphQLString },
+		director: {
+			type: DirectorType,
+			resolve(parent, args) {
+
+				return directors.find(director => compareIds(director.id, parent.directorId));
+			}
+		}
 	}
 });
 
