@@ -1,5 +1,9 @@
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLList } = require(`graphql`);
-// const { directors, movies } = require("../mocks");
+
+// Экземпляры Mongoose-схем
+const Movies = require('../models/movie');
+const Directors = require('../models/director');
+
 const { compareIds } = require('../utils');
 
 const DirectorType = new GraphQLObjectType({
@@ -11,7 +15,8 @@ const DirectorType = new GraphQLObjectType({
 		movies: {
 			type: new GraphQLList(MovieType),
 			resolve(parent, args) {
-				return movies.filter(movie => compareIds(movie.directorId, parent.id));
+				// return movies.filter(movie => compareIds(movie.directorId, parent.id));
+				return Movies.find({ directorId: parent.id });
 			}
 		}
 	})
@@ -26,8 +31,8 @@ const MovieType = new GraphQLObjectType({
 		director: {
 			type: DirectorType,
 			resolve(parent, args) {
-
-				return directors.find(director => compareIds(director.id, parent.directorId));
+				// return directors.find(director => compareIds(director.id, parent.directorId));
+				return Directors.findById(parent.directorId);
 			}
 		}
 	})
@@ -47,13 +52,15 @@ const Query = new GraphQLObjectType({
 		movies: {
 			type: new GraphQLList(MovieType),
 			resolve(parent, args) {
-				return movies;
+				// return movies;
+				return Movies.find({});
 			}
 		},
 		directors: {
 			type: new GraphQLList(DirectorType),
 			resolve(parent, args) {
-				return directors;
+				// return directors;
+				return Directors.find({});
 			}
 		},
 	}
