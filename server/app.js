@@ -2,13 +2,18 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('../schema/schema');
 
-const movies = require(`../mock.json`);
+const { movies, directors } = require(`../mocks`);
 
 const app = express();
 const PORT = 3005;
 
+const compareIds = (dataId, argsId) => {
+	return dataId === Number.parseInt(argsId, 10);
+}
+
 const resolvers = {
-	movie: ({ id }) => movies.find(movie => movie.id === Number.parseInt(id, 10)),
+	movie: ({ id }) => movies.find(movie => compareIds(movie.id, id)),
+	director: ({ id }) => directors.find(director => compareIds(director.id, id)),
 };
 
 app.use(`/graphql`, graphqlHTTP({

@@ -7,8 +7,15 @@ const schema = buildSchema(`
 		genre: String
 	}
 
+	type Director {
+		id: ID!
+		name: String
+		age: Int
+	}
+
 	type Query {
 		movie(id: ID): Movie!
+		director(id: ID): Director!
 	}
 `);
 
