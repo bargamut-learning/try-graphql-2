@@ -1,5 +1,5 @@
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLList } = require(`graphql`);
-const { directors, movies } = require("../mocks");
+// const { directors, movies } = require("../mocks");
 const { compareIds } = require('../utils');
 
 const DirectorType = new GraphQLObjectType({

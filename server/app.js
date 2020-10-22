@@ -3,7 +3,7 @@ const { graphqlHTTP } = require('express-graphql');
 const schema = require('../schema/schema');
 const { compareIds } = require('../utils');
 
-const { movies, directors } = require(`../mocks`);
+// const { movies, directors } = require(`../mocks`);
 
 const app = express();
 const PORT = 3005;
