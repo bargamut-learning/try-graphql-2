@@ -4,8 +4,6 @@ const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLSchema, 
 const Movies = require('../models/movie');
 const Directors = require('../models/director');
 
-// const { compareIds } = require('../utils');
-
 const DirectorType = new GraphQLObjectType({
 	name: `Director`,
 	fields: () => ({
@@ -15,7 +13,6 @@ const DirectorType = new GraphQLObjectType({
 		movies: {
 			type: new GraphQLList(MovieType),
 			resolve(parent, args) {
-				// return movies.filter(movie => compareIds(movie.directorId, parent.id));
 				return Movies.find({ directorId: parent.id });
 			}
 		}
@@ -31,7 +28,6 @@ const MovieType = new GraphQLObjectType({
 		director: {
 			type: DirectorType,
 			resolve(parent, args) {
-				// return directors.find(director => compareIds(director.id, parent.directorId));
 				return Directors.findById(parent.directorId);
 			}
 		}
@@ -131,22 +127,26 @@ const Query = new GraphQLObjectType({
 		movie: {
 			type: MovieType,
 			args: { id: { type: GraphQLID } },
+			resolve(parent, { id }) {
+				return Movies.findById(id);
+			}
 		},
 		director: {
 			type: DirectorType,
 			args: { id: { type: GraphQLID } },
+			resolve(parent, { id }) {
+				return Directors.findById(id);
+			}
 		},
 		movies: {
 			type: new GraphQLList(MovieType),
 			resolve(parent, args) {
-				// return movies;
 				return Movies.find({});
 			}
 		},
 		directors: {
 			type: new GraphQLList(DirectorType),
 			resolve(parent, args) {
-				// return directors;
 				return Directors.find({});
 			}
 		},
