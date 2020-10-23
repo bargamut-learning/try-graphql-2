@@ -91,6 +91,37 @@ const Mutation = new GraphQLObjectType({
 				return Movies.findByIdAndRemove(id);
 			}
 		},
+		updateDirector: { 
+			type: DirectorType,
+			args: {
+				id: { type: GraphQLID },
+				name: { type: GraphQLString },
+				age: { type: GraphQLInt },
+			},
+			resolve(parent, { id, name, age }) {
+				return Directors.findByIdAndUpdate(
+					id,
+					{ $set: { name, age, } },
+					{ new: true },
+				);
+			},
+		},
+		updateMovie: { 
+			type: MovieType,
+			args: {
+				id: { type: GraphQLID },
+				name: { type: GraphQLString },
+				genre: { type: GraphQLString },
+				directorId: { type: GraphQLID },
+			},
+			resolve(parent, { id, name, genre, directorId }) {
+				return Movies.findByIdAndUpdate(
+					id,
+					{ $set: { name, genre, directorId, } },
+					{ new: true },
+				);
+			},
+		},
 	}
 });
 
