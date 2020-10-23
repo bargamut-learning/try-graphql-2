@@ -4,7 +4,7 @@ const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLSchema, 
 const Movies = require('../models/movie');
 const Directors = require('../models/director');
 
-const { compareIds } = require('../utils');
+// const { compareIds } = require('../utils');
 
 const DirectorType = new GraphQLObjectType({
 	name: `Director`,
@@ -38,6 +38,44 @@ const MovieType = new GraphQLObjectType({
 	})
 });
 
+const Mutation = new GraphQLObjectType({
+	name: `Mutation`,
+	fields: {
+		addDirector: {
+			type: DirectorType,
+			args: {
+				name: { type: GraphQLString },
+				age: { type: GraphQLInt },
+			},
+			resolve(parent, { name, age }) {
+				const director = new Directors({
+					name,
+					age,
+				});
+
+				return director.save();
+			}
+		},
+		addMovie: {
+			type: MovieType,
+			args: {
+				name: { type: GraphQLString },
+				genre: { type: GraphQLString },
+				directorId: { type: GraphQLID },
+			},
+			resolve(parent, { name, genre, directorId }) {
+				const movie = new Movies({
+					name,
+					genre,
+					directorId,
+				});
+
+				return movie.save();
+			}
+		},
+	}
+});
+
 const Query = new GraphQLObjectType({
 	name: `Query`,
 	fields: {
@@ -68,4 +106,5 @@ const Query = new GraphQLObjectType({
 
 module.exports = new GraphQLSchema({
 	query: Query,
+	mutation: Mutation,
 });
