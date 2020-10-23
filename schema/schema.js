@@ -73,6 +73,24 @@ const Mutation = new GraphQLObjectType({
 				return movie.save();
 			}
 		},
+		deleteDirector: {
+			type: DirectorType,
+			args: {
+				id: { type: GraphQLID },
+			},
+			resolve(parent, { id }) {
+				return Directors.findByIdAndRemove(id);
+			}
+		},
+		deleteMovie: {
+			type: MovieType,
+			args: {
+				id: { type: GraphQLID },
+			},
+			resolve(parent, { id }) {
+				return Movies.findByIdAndRemove(id);
+			}
+		},
 	}
 });
 
