@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLList, GraphQLNonNull } = require(`graphql`);
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLList, GraphQLNonNull, GraphQLBoolean } = require(`graphql`);
 
 // Экземпляры Mongoose-схем
 const Movies = require('../models/movie');
@@ -25,6 +25,8 @@ const MovieType = new GraphQLObjectType({
 		id: { type: GraphQLID },
 		name: { type: new GraphQLNonNull(GraphQLString) },
 		genre: { type: new GraphQLNonNull(GraphQLString) },
+		watched: { type: new GraphQLNonNull(GraphQLBoolean) },
+		rate: { type: GraphQLInt },
 		director: {
 			type: DirectorType,
 			resolve(parent, args) {
@@ -58,12 +60,16 @@ const Mutation = new GraphQLObjectType({
 				name: { type: new GraphQLNonNull(GraphQLString) },
 				genre: { type: new GraphQLNonNull(GraphQLString) },
 				directorId: { type: GraphQLID },
+				watched: { type: new GraphQLNonNull(GraphQLBoolean) },
+				rate: { type: GraphQLInt },
 			},
-			resolve(parent, { name, genre, directorId }) {
+			resolve(parent, { name, genre, directorId, watched, rate, }) {
 				const movie = new Movies({
 					name,
 					genre,
 					directorId,
+					watched,
+					rate,
 				});
 
 				return movie.save();
@@ -109,11 +115,13 @@ const Mutation = new GraphQLObjectType({
 				name: { type: new GraphQLNonNull(GraphQLString) },
 				genre: { type: new GraphQLNonNull(GraphQLString) },
 				directorId: { type: GraphQLID },
+				watched: { type: new GraphQLNonNull(GraphQLBoolean) },
+				rate: { type: GraphQLInt },
 			},
-			resolve(parent, { id, name, genre, directorId }) {
+			resolve(parent, { id, name, genre, directorId, watched, rate, }) {
 				return Movies.findByIdAndUpdate(
 					id,
-					{ $set: { name, genre, directorId, } },
+					{ $set: { name, genre, directorId, watched, rate, } },
 					{ new: true },
 				);
 			},
