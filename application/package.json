@@ -1,5 +1,5 @@
 {
-  "name": "application",
+  "name": "graphql-tutorial",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
