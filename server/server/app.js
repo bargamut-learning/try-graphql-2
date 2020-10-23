@@ -12,12 +12,12 @@ const { DB_HOST, DB_USER, DB_PASS } = process.env;
 
 mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/graphql-tutorial?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 
+app.use(cors());
+
 app.use(`/graphql`, graphqlHTTP({
 	schema,
 	graphiql: true,
 }));
-
-app.use(cors());
 
 const dbConnection = mongoose.connection;
 
