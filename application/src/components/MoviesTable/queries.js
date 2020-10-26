@@ -9,6 +9,7 @@ export const movieQuery = gql`
 			watched
 			rate
 			director {
+				id
 				name
 			}
 		}
