@@ -3,6 +3,7 @@ import { compose } from 'recompose';
 import { graphql } from 'react-apollo';
 
 import { addDirectorMutation } from './mutations';
+import { directorQuery } from '../DirectorsTable/queries';
 
 import { styles } from './styles';
 
@@ -17,6 +18,10 @@ const withGraphqlAdd = graphql(addDirectorMutation, {
 		 */
 		addDirector: director => mutate({
 			variables: director,
+			// Массив объектов дополнительных запросов при выполнении мутации
+			refetchQueries: [
+				{ query: directorQuery, },
+			],
 		})
 	}),
 });
