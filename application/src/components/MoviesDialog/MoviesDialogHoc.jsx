@@ -9,7 +9,10 @@ const withGraphqlDelete = graphql(deleteMovieMutation, {
 		deleteMovie: id => mutate({
 			variables: id,
 			refetchQueries: [
-				{ query: movieQuery, },
+				{
+					query: movieQuery,
+					variables: { name: '' },
+				},
 			],
 		}),
 	}),
