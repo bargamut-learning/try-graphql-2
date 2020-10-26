@@ -21,7 +21,10 @@ const withGraphQl = compose(
 				variables: director,
 				// Массив объектов дополнительных запросов при выполнении мутации
 				refetchQueries: [
-					{ query: directorQuery, },
+					{
+						query: directorQuery,
+						variables: { name: '' },
+					},
 				],
 			}),
 		}),
@@ -32,7 +35,10 @@ const withGraphQl = compose(
 			updateDirector: director => mutate({
 				variables: director,
 				refetchQueries: [
-					{ query: directorQuery, },
+					{
+						query: directorQuery,
+						variables: { name: '' },
+					},
 				],
 			}),
 		}),
